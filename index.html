@@ -1,0 +1,2037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ApexAuto Parts - Professional Automotive Parts & Accessories</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Font: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: {
+              DEFAULT: '#1A3C5E',
+              dark: '#112942',
+              light: '#234e7a',
+              50: '#f0f4f8'
+            },
+            accent: {
+              DEFAULT: '#E63946',
+              hover: '#d62839'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #1A3C5E; border-radius: 4px; }
+    .fade-in { animation: fadeIn 0.25s ease-in-out; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
+
+  <!-- TOP HEADER / NOTIFICATION BAR -->
+  <div class="bg-slate-900 text-slate-300 text-xs py-2 px-4 border-b border-slate-800">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
+      <div class="flex items-center gap-4">
+        <span><i class="fa-solid fa-phone text-accent mr-1"></i> 1-800-APEX-AUTO</span>
+        <span><i class="fa-solid fa-truck text-emerald-400 mr-1"></i> Free Shipping on Orders Over $75</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <span class="hover:text-white cursor-pointer" onclick="navigateTo('contact')"><i class="fa-solid fa-location-dot mr-1"></i> Store Locator</span>
+        <span class="hover:text-white cursor-pointer" onclick="navigateTo('account')"><i class="fa-solid fa-headset mr-1"></i> Support</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN NAVIGATION -->
+  <header class="bg-navy sticky top-0 z-40 shadow-lg text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20 gap-4">
+        
+        <!-- Logo -->
+        <div class="flex items-center gap-3 cursor-pointer" onclick="navigateTo('home')">
+          <div class="bg-accent text-white p-2.5 rounded-lg shadow-md font-extrabold flex items-center justify-center">
+            <i class="fa-solid fa-gear text-2xl animate-spin-slow"></i>
+          </div>
+          <div>
+            <span class="text-2xl font-black tracking-wider uppercase text-white">APEX<span class="text-accent">AUTO</span></span>
+            <p class="text-[10px] text-slate-300 font-medium tracking-widest uppercase -mt-1">Rugged & Reliable Parts</p>
+          </div>
+        </div>
+
+        <!-- Global Search Bar -->
+        <div class="hidden md:flex flex-1 max-w-xl mx-4">
+          <div class="relative w-full">
+            <input type="text" id="searchInput" onkeyup="handleSearch(event)" placeholder="Search parts by name, OEM code, or category..." class="w-full bg-white text-slate-900 pl-4 pr-10 py-2.5 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-accent shadow-inner">
+            <button onclick="triggerSearch()" class="absolute right-0 top-0 bottom-0 px-4 bg-accent text-white rounded-r-lg hover:bg-accent-hover transition-colors">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Action Items (Vehicle Select, Wishlist, Cart, Account) -->
+        <div class="flex items-center gap-3 sm:gap-5">
+          <!-- Active Vehicle Selector Pill -->
+          <button onclick="openVehicleModal()" class="hidden xl:flex items-center gap-2 bg-navy-dark hover:bg-slate-800 border border-slate-600 px-3 py-1.5 rounded-lg text-xs transition-all">
+            <i class="fa-solid fa-car text-accent"></i>
+            <div class="text-left">
+              <div class="text-[10px] text-slate-400 font-semibold uppercase leading-tight">My Vehicle</div>
+              <div id="navVehicleLabel" class="font-bold text-white leading-tight">Select Vehicle</div>
+            </div>
+          </button>
+
+          <!-- Wishlist -->
+          <button onclick="navigateTo('account', 'wishlist')" class="relative p-2 text-slate-200 hover:text-white transition-colors">
+            <i class="fa-regular fa-heart text-xl"></i>
+            <span id="wishlistBadge" class="absolute -top-1 -right-1 bg-accent text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center hidden">0</span>
+          </button>
+
+          <!-- Cart Icon -->
+          <button onclick="toggleCartDrawer()" class="relative p-2 text-slate-200 hover:text-white transition-colors flex items-center gap-2 bg-navy-light px-3 py-2 rounded-lg border border-slate-600">
+            <div class="relative">
+              <i class="fa-solid fa-cart-shopping text-lg"></i>
+              <span id="cartBadge" class="absolute -top-2 -right-2 bg-accent text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
+            </div>
+            <span class="hidden sm:inline text-sm font-semibold" id="cartTotalNav">$0.00</span>
+          </button>
+
+          <!-- User Account / Login Button -->
+          <div id="navUserArea">
+            <!-- Dynamic Content loaded via JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile Search Bar -->
+      <div class="md:hidden pb-4">
+        <div class="relative w-full">
+          <input type="text" id="mobileSearchInput" onkeyup="handleSearch(event)" placeholder="Search parts..." class="w-full bg-white text-slate-900 pl-4 pr-10 py-2 rounded-lg text-sm">
+          <button onclick="triggerSearch()" class="absolute right-0 top-0 bottom-0 px-3 text-slate-500">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CATEGORY NAVIGATION BAR -->
+    <nav class="bg-navy-dark border-t border-slate-700/50 text-xs font-medium uppercase tracking-wider overflow-x-auto custom-scrollbar">
+      <div class="max-w-7xl mx-auto px-4 flex items-center justify-between whitespace-nowrap">
+        <div class="flex space-x-1 py-1">
+          <button onclick="navigateTo('products')" class="px-3 py-2 rounded hover:bg-navy-light hover:text-white text-slate-300 transition-colors">All Products</button>
+          <button onclick="filterByCategory('Engine Parts')" class="px-3 py-2 rounded hover:bg-navy-light hover:text-white text-slate-300 transition-colors"><i class="fa-solid fa-gear mr-1 text-accent"></i> Engine Parts</button>
+          <button onclick="filterByCategory('Brakes & Tires')" class="px-3 py-2 rounded hover:bg-navy-light hover:text-white text-slate-300 transition-colors"><i class="fa-solid fa-circle-dot mr-1 text-accent"></i> Brakes & Tires</button>
+          <button onclick="filterByCategory('Lighting & Electrical')" class="px-3 py-2 rounded hover:bg-navy-light hover:text-white text-slate-300 transition-colors"><i class="fa-solid fa-bolt mr-1 text-accent"></i> Lighting & Electrical</button>
+          <button onclick="filterByCategory('Accessories')" class="px-3 py-2 rounded hover:bg-navy-light hover:text-white text-slate-300 transition-colors"><i class="fa-solid fa-toolbox mr-1 text-accent"></i> Accessories</button>
+        </div>
+        <div class="hidden lg:flex items-center space-x-4">
+          <button onclick="navigateTo('about')" class="px-2 py-2 text-slate-300 hover:text-white">About Us</button>
+          <button onclick="navigateTo('contact')" class="px-2 py-2 text-slate-300 hover:text-white">Contact</button>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- MAIN CONTENT CONTAINER VIEWPORT -->
+  <main id="appContainer" class="flex-grow">
+    <!-- Dynamic views will be rendered here via JS -->
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-slate-900 text-slate-400 text-sm mt-16 border-t-4 border-accent">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+        
+        <!-- Company Info -->
+        <div class="lg:col-span-2">
+          <div class="flex items-center gap-2 mb-4">
+            <div class="bg-accent text-white p-1.5 rounded font-extrabold text-lg">
+              <i class="fa-solid fa-gear"></i>
+            </div>
+            <span class="text-xl font-black text-white uppercase tracking-wider">APEX<span class="text-accent">AUTO</span></span>
+          </div>
+          <p class="text-slate-400 mb-4 pr-6 leading-relaxed">
+            Your premier source for high-performance automotive replacement parts, heavy-duty accessories, and precision tools. Engineered for reliability and safety on every terrain.
+          </p>
+          <div class="flex space-x-3 text-lg">
+            <a href="#" class="w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center hover:bg-accent hover:text-white transition-colors"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" class="w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center hover:bg-accent hover:text-white transition-colors"><i class="fa-brands fa-twitter"></i></a>
+            <a href="#" class="w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center hover:bg-accent hover:text-white transition-colors"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" class="w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center hover:bg-accent hover:text-white transition-colors"><i class="fa-brands fa-youtube"></i></a>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div>
+          <h3 class="text-white font-bold uppercase tracking-wider text-xs mb-4 border-l-2 border-accent pl-2">Categories</h3>
+          <ul class="space-y-2 text-xs">
+            <li><a href="#" onclick="filterByCategory('Engine Parts'); return false;" class="hover:text-white transition-colors">Engine Parts & Filters</a></li>
+            <li><a href="#" onclick="filterByCategory('Brakes & Tires'); return false;" class="hover:text-white transition-colors">Brake Pads & Rotors</a></li>
+            <li><a href="#" onclick="filterByCategory('Lighting & Electrical'); return false;" class="hover:text-white transition-colors">Lighting & Electrical</a></li>
+            <li><a href="#" onclick="filterByCategory('Accessories'); return false;" class="hover:text-white transition-colors">Interior & Exterior Accessories</a></li>
+            <li><a href="#" onclick="navigateTo('products'); return false;" class="hover:text-white transition-colors">Special Discount Deals</a></li>
+          </ul>
+        </div>
+
+        <!-- Customer Service -->
+        <div>
+          <h3 class="text-white font-bold uppercase tracking-wider text-xs mb-4 border-l-2 border-accent pl-2">Customer Care</h3>
+          <ul class="space-y-2 text-xs">
+            <li><a href="#" onclick="navigateTo('account'); return false;" class="hover:text-white transition-colors">My Account & Orders</a></li>
+            <li><a href="#" onclick="navigateTo('contact'); return false;" class="hover:text-white transition-colors">Shipping & Delivery Info</a></li>
+            <li><a href="#" onclick="navigateTo('contact'); return false;" class="hover:text-white transition-colors">Returns & Refund Policy</a></li>
+            <li><a href="#" onclick="openVehicleModal(); return false;" class="hover:text-white transition-colors">Vehicle Compatibility Guarantee</a></li>
+            <li><a href="#" onclick="navigateTo('contact'); return false;" class="hover:text-white transition-colors">Contact Support</a></li>
+          </ul>
+        </div>
+
+        <!-- Newsletter & Guarantee -->
+        <div>
+          <h3 class="text-white font-bold uppercase tracking-wider text-xs mb-4 border-l-2 border-accent pl-2">Stay Connected</h3>
+          <p class="text-xs text-slate-400 mb-3">Subscribe for exclusive discount codes and technical advice.</p>
+          <form onsubmit="handleNewsletterSubmit(event)" class="space-y-2">
+            <input type="email" required placeholder="Enter your email" class="w-full bg-slate-800 text-white text-xs px-3 py-2 rounded focus:outline-none focus:ring-1 focus:ring-accent border border-slate-700">
+            <button type="submit" class="w-full bg-accent hover:bg-accent-hover text-white text-xs font-bold py-2 rounded uppercase tracking-wider transition-colors">Subscribe</button>
+          </form>
+        </div>
+
+      </div>
+
+      <!-- Bottom Bar -->
+      <div class="mt-12 pt-6 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center text-xs text-slate-500 gap-4">
+        <p>&copy; 2026 ApexAuto Parts Inc. All rights reserved. Built for precision & durability.</p>
+        <div class="flex items-center space-x-4">
+          <span><i class="fa-brands fa-cc-visa text-xl hover:text-slate-300"></i></span>
+          <span><i class="fa-brands fa-cc-mastercard text-xl hover:text-slate-300"></i></span>
+          <span><i class="fa-brands fa-cc-paypal text-xl hover:text-slate-300"></i></span>
+          <span><i class="fa-brands fa-cc-apple-pay text-xl hover:text-slate-300"></i></span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SIDE CART DRAWER -->
+  <div id="cartDrawer" class="fixed inset-0 z-50 overflow-hidden hidden" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
+    <div class="absolute inset-0 bg-slate-900 bg-opacity-75 transition-opacity" onclick="toggleCartDrawer()"></div>
+    <div class="fixed inset-y-0 right-0 pl-10 max-w-full flex">
+      <div class="w-screen max-w-md bg-white shadow-2xl flex flex-col">
+        <!-- Drawer Header -->
+        <div class="p-6 bg-navy text-white flex items-center justify-between">
+          <h2 class="text-lg font-bold flex items-center gap-2">
+            <i class="fa-solid fa-cart-shopping text-accent"></i> Shopping Cart
+          </h2>
+          <button onclick="toggleCartDrawer()" class="text-slate-300 hover:text-white text-xl">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <!-- Drawer Content List -->
+        <div class="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar" id="cartDrawerItems">
+          <!-- Rendered via JS -->
+        </div>
+
+        <!-- Drawer Footer Summary -->
+        <div class="border-t border-slate-200 p-6 bg-slate-50 space-y-4">
+          <div class="space-y-1 text-sm">
+            <div class="flex justify-between text-slate-600">
+              <span>Subtotal</span>
+              <span id="cartDrawerSubtotal">$0.00</span>
+            </div>
+            <div class="flex justify-between text-slate-600">
+              <span>Estimated Shipping</span>
+              <span id="cartDrawerShipping">Free</span>
+            </div>
+            <div class="flex justify-between text-base font-bold text-slate-900 pt-2 border-t border-slate-200">
+              <span>Total</span>
+              <span id="cartDrawerTotal" class="text-accent">$0.00</span>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <button onclick="toggleCartDrawer(); navigateTo('cart');" class="w-full bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-2.5 px-4 rounded-lg text-sm text-center transition-colors">
+              View Cart
+            </button>
+            <button onclick="toggleCartDrawer(); navigateTo('checkout');" class="w-full bg-accent hover:bg-accent-hover text-white font-bold py-2.5 px-4 rounded-lg text-sm text-center shadow transition-colors">
+              Checkout
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VEHICLE SELECTION MODAL -->
+  <div id="vehicleModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/80 p-4 hidden">
+    <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full overflow-hidden fade-in">
+      <div class="bg-navy text-white p-5 flex justify-between items-center">
+        <h3 class="font-bold text-lg flex items-center gap-2">
+          <i class="fa-solid fa-car text-accent"></i> Select Your Vehicle
+        </h3>
+        <button onclick="closeVehicleModal()" class="text-slate-300 hover:text-white">
+          <i class="fa-solid fa-xmark text-xl"></i>
+        </button>
+      </div>
+      <div class="p-6 space-y-4">
+        <p class="text-xs text-slate-600">Ensure 100% exact part fitment by providing your vehicle specifications.</p>
+        <div class="grid grid-cols-1 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Year</label>
+            <select id="vehicleYear" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-navy">
+              <option value="">Select Year</option>
+              <option value="2024">2024</option>
+              <option value="2023">2023</option>
+              <option value="2022">2022</option>
+              <option value="2021">2021</option>
+              <option value="2020">2020</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Make</label>
+            <select id="vehicleMake" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-navy">
+              <option value="">Select Make</option>
+              <option value="Toyota">Toyota</option>
+              <option value="Ford">Ford</option>
+              <option value="Chevrolet">Chevrolet</option>
+              <option value="Honda">Honda</option>
+              <option value="BMW">BMW</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Model</label>
+            <select id="vehicleModel" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-navy">
+              <option value="">Select Model</option>
+              <option value="Camry / F-150 / Civic">Standard Trim</option>
+              <option value="F-150 SuperCrew">F-150 SuperCrew</option>
+              <option value="Silverado 1500">Silverado 1500</option>
+              <option value="Civic Type R">Civic Type R</option>
+              <option value="M3 Performance">M3 Performance</option>
+            </select>
+          </div>
+        </div>
+        <div class="pt-4 flex justify-end space-x-3">
+          <button onclick="closeVehicleModal()" class="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-slate-800">Cancel</button>
+          <button onclick="saveSelectedVehicle()" class="px-6 py-2 bg-navy hover:bg-navy-dark text-white font-bold rounded-lg text-sm shadow">Save Vehicle</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AUTH / LOGIN MODAL -->
+  <div id="authModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/80 p-4 hidden">
+    <div class="bg-white rounded-xl shadow-2xl max-w-md w-full overflow-hidden fade-in">
+      <!-- Tabs -->
+      <div class="flex border-b border-slate-200">
+        <button id="tabLoginBtn" onclick="switchAuthTab('login')" class="flex-1 py-4 text-center font-bold text-sm bg-slate-100 text-slate-700 border-b-2 border-transparent">Log In</button>
+        <button id="tabRegisterBtn" onclick="switchAuthTab('register')" class="flex-1 py-4 text-center font-bold text-sm bg-slate-100 text-slate-700 border-b-2 border-transparent">Create Account</button>
+        <button onclick="closeAuthModal()" class="px-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+
+      <div class="p-6">
+        <!-- LOGIN FORM -->
+        <form id="loginForm" onsubmit="handleLoginSubmit(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Email Address</label>
+            <input type="email" id="loginEmail" required value="demo@apexauto.com" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-navy">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Password</label>
+            <input type="password" id="loginPassword" required value="password123" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-navy">
+          </div>
+          <div class="flex items-center justify-between text-xs">
+            <label class="flex items-center text-slate-600">
+              <input type="checkbox" checked class="rounded border-slate-300 text-accent focus:ring-accent mr-2"> Remember me
+            </label>
+            <a href="#" class="text-navy font-semibold hover:underline">Forgot password?</a>
+          </div>
+          <button type="submit" class="w-full bg-navy hover:bg-navy-dark text-white font-bold py-3 rounded-lg text-sm uppercase tracking-wider shadow transition-colors">Sign In</button>
+          <div class="text-center text-xs text-slate-500 mt-2">
+            Demo Credentials Pre-filled. Click <b>Sign In</b>.
+          </div>
+        </form>
+
+        <!-- REGISTER FORM -->
+        <form id="registerForm" onsubmit="handleRegisterSubmit(event)" class="space-y-4 hidden">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Full Name</label>
+            <input type="text" id="regName" required placeholder="Alex Mercer" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-navy">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Email Address</label>
+            <input type="email" id="regEmail" required placeholder="alex@example.com" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-navy">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Password</label>
+            <input type="password" id="regPassword" required placeholder="••••••••" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-navy">
+          </div>
+          <button type="submit" class="w-full bg-accent hover:bg-accent-hover text-white font-bold py-3 rounded-lg text-sm uppercase tracking-wider shadow transition-colors">Register Account</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTIFICATION TOAST -->
+  <div id="toastNotification" class="fixed bottom-5 right-5 z-50 bg-slate-900 text-white px-5 py-3 rounded-lg shadow-xl flex items-center space-x-3 transition-all transform translate-y-20 opacity-0">
+    <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400 text-xl"></i>
+    <span id="toastMessage" class="text-sm font-medium">Notification message</span>
+  </div>
+
+  <!-- JAVASCRIPT APPLICATION CORE -->
+  <script>
+    /* ==========================================================================
+       1. DATA STRUCTURES & DATASETS
+       ========================================================================== */
+    const PRODUCTS = [
+      // ENGINE PARTS
+      {
+        id: 'ENG-101',
+        name: 'High-Flow Synthetic Oil Filter',
+        category: 'Engine Parts',
+        subcategory: 'Filters',
+        price: 18.99,
+        originalPrice: 24.99,
+        rating: 4.8,
+        reviewsCount: 124,
+        brand: 'BoschPro',
+        vehicleType: 'Sedan / SUV',
+        image: 'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=500&auto=format&fit=crop&q=80',
+        compatibility: ['2020-2024 Toyota Camry', '2019-2023 Honda Accord', '2021-2024 Ford F-150'],
+        specs: { 'Material': 'Synthetic Media', 'Gasket Type': 'NBR Rubber', 'Micron Rating': '99% @ 20u' },
+        description: 'Engineered with synthetic blend filtration media that captures 99% of harmful engine contaminants to preserve engine lifespan.',
+        isFeatured: true,
+        badge: 'Best Seller'
+      },
+      {
+        id: 'ENG-102',
+        name: 'Iridium Power Spark Plug Set (Pack of 4)',
+        category: 'Engine Parts',
+        subcategory: 'Spark Plugs & Wires',
+        price: 42.50,
+        originalPrice: 49.99,
+        rating: 4.9,
+        reviewsCount: 88,
+        brand: 'NGK Tech',
+        vehicleType: 'Universal',
+        image: 'https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=500&auto=format&fit=crop&q=80',
+        compatibility: ['Universal Fitment for 2.0L - 3.5L Engines'],
+        specs: { 'Center Electrode': 'Iridium', 'Gap Size': '0.044 inch', 'Hex Size': '5/8 in' },
+        description: 'Delivers superior ignitibility and spark response under extreme pressure conditions, boosting fuel efficiency.',
+        isFeatured: true
+      },
+      {
+        id: 'ENG-103',
+        name: 'Heavy-Duty Engine Serpent Belt',
+        category: 'Engine Parts',
+        subcategory: 'Belts & Hoses',
+        price: 29.95,
+        rating: 4.6,
+        reviewsCount: 45,
+        brand: 'Gates Pro',
+        vehicleType: 'Truck',
+        image: 'https://images.unsplash.com/photo-1486006920555-c77dce18193b?w=500&auto=format&fit=crop&q=80',
+        compatibility: ['2018-2023 Ford F-150', '2019-2024 Chevy Silverado'],
+        specs: { 'Rib Count': '6 Ribs', 'Belt Length': '82.5 inches', 'Material': 'EPDM Rubber' },
+        description: 'Constructed from durable EPDM synthetic rubber resistant to heat and cracking under heavy engine loading.',
+        isFeatured: false
+      },
+      {
+        id: 'ENG-104',
+        name: 'Full Synthetic Motor Oil 5W-30 (5 Qts)',
+        category: 'Engine Parts',
+        subcategory: 'Engine Oil & Fluids',
+        price: 36.99,
+        originalPrice: 44.99,
+        rating: 4.9,
+        reviewsCount: 310,
+        brand: 'Mobil 1',
+        vehicleType: 'Universal',
+        image: 'https://images.unsplash.com/photo-1615906655593-ad0386982a0f?w=500&auto=format&fit=crop&q=80',
+        compatibility: ['All Gasoline Engines requiring 5W-30'],
+        specs: { 'Viscosity': '5W-30', 'Volume': '5 US Quarts', 'API Spec': 'SP / GF-6A' },
+        description: 'Advanced full synthetic formula designed to keep your engine running like new by combating wear, sludge, and heat.',
+        isFeatured: true,
+        badge: 'Top Rated'
+      },
+
+      // BRAKES & TIRES
+      {
+        id: 'BRK-201',
+        name: 'Ceramic Performance Brake Pad Set (Front)',
+        category: 'Brakes & Tires',
+        subcategory: 'Brake Pads & Rotors',
+        price: 64.99,
+        originalPrice: 79.99,
+        rating: 4.9,
+        reviewsCount: 204,
+        brand: 'Brembo Elite',
+        vehicleType: 'Sedan / SUV',
+        image: 'https://images.unsplash.com/photo-1600706432523-9914c387088b?w=500&auto=format&fit=crop&q=80',
+        compatibility: ['2018-2024 Toyota Camry', '2019-2023 Honda Civic', '2020-2024 BMW 3 Series'],
+        specs: { 'Material': 'Ultra-Dustless Ceramic', 'Hardware Included': 'Yes', 'Noise Level': 'Silent Shims' },
+        description: 'Premium ceramic compound formulation engineered for severe duty thermal dissipation, minimal dust, and zero squeal.',
+        isFeatured: true,
+        badge: 'Hot Deal'
+      },
+      {
+        id: 'BRK-202',
+        name: 'Drilled & Slotted Brake Rotors (Pair)',
+        category: 'Brakes & Tires',
+        subcategory: 'Brake Pads & Rotors',
+        price: 139.00,
+        originalPrice: 165.00,
+        rating: 4.7,
+        reviewsCount: 95,
+        brand: 'Brembo Elite',
+        vehicleType: 'Performance / Sport',
+        image: 'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=500&auto=format&fit=crop&q=80',
+        compatibility: ['2020-2024 BMW 3 Series', '2019-2024 Ford Mustang'],
+        specs: { 'Finish': 'Zinc Plated Anti-Rust', 'Diameter': '320mm', 'Vented': 'Yes' },
+        description: 'Cross-drilled and slotted surface reduces braking fade under repeated high-speed stops while channeling away moisture.',
+        isFeatured: true
+      },
+      {
+        id: 'BRK-203',
+        name: 'All-Terrain All-Season Tire 265/70R17',
+        category: 'Brakes & Tires',
+        subcategory: 'Tires & Wheels',
+        price: 189.99,
+        originalPrice: 219.99,
+        rating: 4.8,
+        reviewsCount: 156,
+        brand: 'Michelin Pro',
+        vehicleType: 'Truck / SUV',
+        image: 'https://images.unsplash.com/photo-1578844251758-2f71da64c96f?w=500&auto=format&fit=crop&q=80',
+        compatibility: ['2015-2024 Ford F-150', '2018-2024 Chevy Silverado'],
+        specs: { 'Tread Warranty': '60,000 Miles', 'Speed Index': 'T', 'Load Range': 'SL' },
+        description: 'Aggressive shoulder tread design delivers traction on dirt, mud, and snow while retaining quiet highway performance.',
+        isFeatured: false
+      },
+      {
+        id: 'BRK-204',
+        name: 'Wireless Tire Pressure Sensor (TPMS)',
+        category: 'Brakes & Tires',
+        subcategory: 'Tire Pressure Monitors',
+        price: 34.50,
+        rating: 4.5,
+        reviewsCount: 62,
+        brand: 'BoschPro',
+        vehicleType: 'Universal',
+        image: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=500&auto=format&fit=crop&q=80',
+        compatibility: ['Universal 315MHz / 433MHz Vehicles'],
+        specs: { 'Frequency': '315 MHz', 'Battery Life': '5+ Years', 'Pre-programmed': 'Yes' },
+        description: 'Direct OEM replacement TPMS sensor providing accurate real-time telemetry to your vehicle dash.',
+        isFeatured: false
+      },
+
+      // LIGHTING & ELECTRICAL
+      {
+        id: 'ELE-301',
+        name: 'Ultra-Bright LED Headlight Bulb Conversion Kit',
+        category: 'Lighting & Electrical',
+        subcategory: 'Headlights & Bulbs',
+        price: 89.99,
+        originalPrice: 119.99,
+        rating: 4.9,
+        reviewsCount: 412,
+        brand: 'Sylvania Xenon',
+        vehicleType: 'Universal',
+        image: 'https://images.unsplash.com/photo-1511919884226-fd3cad34687c?w=500&auto=format&fit=crop&q=80',
+        compatibility: ['Universal H11 / 9005 Socket Types'],
+        specs: { 'Lumens': '12,000 LM/Pair', 'Color Temp': '6500K Cool White', 'Fan Cooled': 'Yes' },
+        description: 'Projects 300% brighter illumination than standard halogen bulbs with crisp 6500K beam pattern.',
+        isFeatured: true,
+        badge: 'Popular'
+      },
+      {
+        id: 'ELE-302',
+        name: 'AGM Heavy-Duty Automotive Battery 800 CCA',
+        category: 'Lighting & Electrical',
+        subcategory: 'Batteries & Chargers',
+        price: 219.00,
+        rating: 4.7,
+        reviewsCount: 78,
+        brand: 'Optima Power',
+        vehicleType: 'Truck / SUV',
+        image: 'https://images.unsplash.com/photo-1597739239353-50270a473397?w=500&auto=format&fit=crop&q=80',
+        compatibility: ['Group Size 34/78 Universal Fit'],
+        specs: { 'Cold Cranking Amps': '800 CCA', 'Reserve Capacity': '100 Min', 'Voltage': '12V' },
+        description: 'Absorbed Glass Mat (AGM) design for extreme vibration resistance and maximum starting torque in sub-zero temps.',
+        isFeatured: false
+      },
+      {
+        id: 'ELE-303',
+        name: '50-Inch Dual Row Off-Road LED Light Bar',
+        category: 'Lighting & Electrical',
+        subcategory: 'LED Lights & Bars',
+        price: 149.99,
+        originalPrice: 179.99,
+        rating: 4.8,
+        reviewsCount: 165,
+        brand: 'RuggedRidge',
+        vehicleType: 'Truck / SUV',
+        image: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=500&auto=format&fit=crop&q=80',
+        compatibility: ['Off-Road Trucks, Jeeps & SUVs'],
+        specs: { 'Wattage': '300W', 'Waterproof Rating': 'IP68', 'Housing': 'Die-Cast Aluminum' },
+        description: 'Combines spot and flood light reflectors for maximum off-road night visibility with military-grade casing.',
+        isFeatured: true
+      },
+
+      // ACCESSORIES
+      {
+        id: 'ACC-401',
+        name: 'All-Weather Custom Rubber Floor Liners',
+        category: 'Accessories',
+        subcategory: 'Floor Mats & Liners',
+        price: 119.99,
+        originalPrice: 139.99,
+        rating: 4.9,
+        reviewsCount: 289,
+        brand: 'WeatherArmor',
+        vehicleType: 'Universal',
+        image: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=500&auto=format&fit=crop&q=80',
+        compatibility: ['2018-2024 Ford F-150', '2019-2024 Toyota RAV4', '2020-2024 Chevy Tahoe'],
+        specs: { 'Material': 'TPE Thermoplastic', 'Coverage': '1st & 2nd Row', 'Clean Method': 'Hose Washable' },
+        description: 'Laser-measured raised edges trap mud, spills, and snowmelt to keep vehicle carpeting in showroom condition.',
+        isFeatured: true,
+        badge: 'Must Have'
+      },
+      {
+        id: 'ACC-402',
+        name: 'MagSafe Wireless Charging Car Phone Mount',
+        category: 'Accessories',
+        subcategory: 'Phone Mounts',
+        price: 39.99,
+        rating: 4.6,
+        reviewsCount: 142,
+        brand: 'TechGrip',
+        vehicleType: 'Universal',
+        image: 'https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?w=500&auto=format&fit=crop&q=80',
+        compatibility: ['Universal Vent / Dash Mount'],
+        specs: { 'Output': '15W Fast Charge', 'Mounting': 'Vent Clip & Suction Cup', 'Rotation': '360 Degree' },
+        description: 'Strong neodymium magnetic ring locks smartphone in place securely even on bumpy roads.',
+        isFeatured: false
+      },
+      {
+        id: 'ACC-403',
+        name: 'Heavy-Duty Waterproof Outdoor Car Cover',
+        category: 'Accessories',
+        subcategory: 'Car Covers',
+        price: 79.95,
+        rating: 4.7,
+        reviewsCount: 83,
+        brand: 'WeatherArmor',
+        vehicleType: 'Sedan / Coupe',
+        image: 'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?w=500&auto=format&fit=crop&q=80',
+        compatibility: ['Fits Sedans up to 195 inches in length'],
+        specs: { 'Layers': '6-Layer Fleece-Lined', 'UV Protection': 'UPF 50+', 'Windproof Straps': 'Included' },
+        description: 'Breathable 6-layer fabric prevents moisture buildup under cover while shielding paintwork from hail, rain, and solar UV.',
+        isFeatured: false
+      }
+    ];
+
+    /* ==========================================================================
+       2. GLOBAL STATE STORE
+       ========================================================================== */
+    const State = {
+      currentPage: 'home', // 'home', 'products', 'detail', 'cart', 'checkout', 'account', 'about', 'contact'
+      selectedProductId: null,
+      searchQuery: '',
+      cart: [], // Array of { product: Object, qty: Number, vehicleFit: String }
+      wishlist: [], // Array of product IDs
+      selectedVehicle: { year: '2022', make: 'Toyota', model: 'Camry' },
+      user: null, // Logged in user details object or null
+      
+      // Filter state for product listing
+      filters: {
+        category: 'All',
+        subcategory: 'All',
+        brand: 'All',
+        vehicleType: 'All',
+        maxPrice: 300,
+        sort: 'featured'
+      },
+
+      // Saved Orders
+      orders: [
+        {
+          id: 'ORD-89210',
+          date: '2026-09-14',
+          total: 183.98,
+          status: 'Delivered',
+          trackingNumber: 'TRK-90028129-US',
+          items: [
+            { name: 'Ceramic Performance Brake Pad Set', qty: 1, price: 64.99 },
+            { name: 'All-Weather Custom Rubber Floor Liners', qty: 1, price: 118.99 }
+          ]
+        }
+      ]
+    };
+
+    /* ==========================================================================
+       3. NAVIGATION & ROUTING CONTROLLER
+       ========================================================================== */
+    function navigateTo(page, param = null) {
+      State.currentPage = page;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      if (page === 'detail' && param) {
+        State.selectedProductId = param;
+      }
+      if (page === 'products' && param) {
+        State.filters.category = param;
+      }
+
+      render();
+    }
+
+    function filterByCategory(cat) {
+      State.filters.category = cat;
+      State.filters.subcategory = 'All';
+      navigateTo('products');
+    }
+
+    function triggerSearch() {
+      const q = document.getElementById('searchInput').value || document.getElementById('mobileSearchInput').value;
+      if (q.trim()) {
+        State.searchQuery = q.trim();
+        navigateTo('products');
+      }
+    }
+
+    function handleSearch(e) {
+      if (e.key === 'Enter') {
+        triggerSearch();
+      }
+    }
+
+    /* ==========================================================================
+       4. AUTHENTICATION & MODAL CONTROLLERS
+       ========================================================================== */
+    function openAuthModal(defaultTab = 'login') {
+      switchAuthTab(defaultTab);
+      document.getElementById('authModal').classList.remove('hidden');
+    }
+
+    function closeAuthModal() {
+      document.getElementById('authModal').classList.add('hidden');
+    }
+
+    function switchAuthTab(tab) {
+      const loginBtn = document.getElementById('tabLoginBtn');
+      const regBtn = document.getElementById('tabRegisterBtn');
+      const loginForm = document.getElementById('loginForm');
+      const regForm = document.getElementById('registerForm');
+
+      if (tab === 'login') {
+        loginBtn.className = "flex-1 py-4 text-center font-bold text-sm bg-white text-navy border-b-2 border-accent";
+        regBtn.className = "flex-1 py-4 text-center font-bold text-sm bg-slate-100 text-slate-500 border-b-2 border-transparent";
+        loginForm.classList.remove('hidden');
+        regForm.classList.add('hidden');
+      } else {
+        regBtn.className = "flex-1 py-4 text-center font-bold text-sm bg-white text-navy border-b-2 border-accent";
+        loginBtn.className = "flex-1 py-4 text-center font-bold text-sm bg-slate-100 text-slate-500 border-b-2 border-transparent";
+        regForm.classList.remove('hidden');
+        loginForm.classList.add('hidden');
+      }
+    }
+
+    function handleLoginSubmit(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value;
+      State.user = {
+        name: 'Alex Mercer',
+        email: email,
+        memberSince: '2024',
+        vehicle: `${State.selectedVehicle.year} ${State.selectedVehicle.make} ${State.selectedVehicle.model}`
+      };
+      closeAuthModal();
+      showToast('Successfully logged in! Welcome back.');
+      renderNavUserArea();
+      if (State.currentPage === 'account') render();
+    }
+
+    function handleRegisterSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('regName').value;
+      const email = document.getElementById('regEmail').value;
+      State.user = {
+        name: name,
+        email: email,
+        memberSince: '2026',
+        vehicle: `${State.selectedVehicle.year} ${State.selectedVehicle.make} ${State.selectedVehicle.model}`
+      };
+      closeAuthModal();
+      showToast('Account created successfully!');
+      renderNavUserArea();
+      if (State.currentPage === 'account') render();
+    }
+
+    function logoutUser() {
+      State.user = null;
+      showToast('You have logged out.');
+      renderNavUserArea();
+      navigateTo('home');
+    }
+
+    function openVehicleModal() {
+      document.getElementById('vehicleModal').classList.remove('hidden');
+    }
+
+    function closeVehicleModal() {
+      document.getElementById('vehicleModal').classList.add('hidden');
+    }
+
+    function saveSelectedVehicle() {
+      const year = document.getElementById('vehicleYear').value || '2022';
+      const make = document.getElementById('vehicleMake').value || 'Toyota';
+      const model = document.getElementById('vehicleModel').value || 'Camry';
+
+      State.selectedVehicle = { year, make, model };
+      document.getElementById('navVehicleLabel').innerText = `${year} ${make} ${model}`;
+      closeVehicleModal();
+      showToast(`Vehicle set to ${year} ${make} ${model}`);
+      render();
+    }
+
+    /* ==========================================================================
+       5. CART & WISHLIST LOGIC
+       ========================================================================== */
+    function addToCart(productId, quantity = 1) {
+      const product = PRODUCTS.find(p => p.id === productId);
+      if (!product) return;
+
+      const existingIndex = State.cart.findIndex(item => item.product.id === productId);
+      if (existingIndex > -1) {
+        State.cart[existingIndex].qty += quantity;
+      } else {
+        State.cart.push({
+          product,
+          qty: quantity,
+          vehicleFit: `${State.selectedVehicle.year} ${State.selectedVehicle.make} ${State.selectedVehicle.model}`
+        });
+      }
+
+      updateCartBadges();
+      showToast(`Added ${product.name} to cart.`);
+    }
+
+    function updateCartQty(productId, delta) {
+      const index = State.cart.findIndex(item => item.product.id === productId);
+      if (index > -1) {
+        State.cart[index].qty += delta;
+        if (State.cart[index].qty <= 0) {
+          State.cart.splice(index, 1);
+        }
+      }
+      updateCartBadges();
+      if (State.currentPage === 'cart' || State.currentPage === 'checkout') render();
+      renderCartDrawer();
+    }
+
+    function removeFromCart(productId) {
+      State.cart = State.cart.filter(item => item.product.id !== productId);
+      updateCartBadges();
+      if (State.currentPage === 'cart' || State.currentPage === 'checkout') render();
+      renderCartDrawer();
+    }
+
+    function toggleWishlist(productId) {
+      const index = State.wishlist.indexOf(productId);
+      if (index > -1) {
+        State.wishlist.splice(index, 1);
+        showToast('Removed item from Wishlist');
+      } else {
+        State.wishlist.push(productId);
+        showToast('Saved item to Wishlist');
+      }
+      updateWishlistBadge();
+      render();
+    }
+
+    function calculateSubtotal() {
+      return State.cart.reduce((sum, item) => sum + (item.product.price * item.qty), 0);
+    }
+
+    function updateCartBadges() {
+      const totalItems = State.cart.reduce((sum, item) => sum + item.qty, 0);
+      const subtotal = calculateSubtotal();
+
+      document.getElementById('cartBadge').innerText = totalItems;
+      document.getElementById('cartTotalNav').innerText = `$${subtotal.toFixed(2)}`;
+    }
+
+    function updateWishlistBadge() {
+      const badge = document.getElementById('wishlistBadge');
+      if (State.wishlist.length > 0) {
+        badge.innerText = State.wishlist.length;
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
+      }
+    }
+
+    function toggleCartDrawer() {
+      const drawer = document.getElementById('cartDrawer');
+      drawer.classList.toggle('hidden');
+      if (!drawer.classList.contains('hidden')) {
+        renderCartDrawer();
+      }
+    }
+
+    function renderCartDrawer() {
+      const container = document.getElementById('cartDrawerItems');
+      const subtotalEl = document.getElementById('cartDrawerSubtotal');
+      const totalEl = document.getElementById('cartDrawerTotal');
+
+      if (State.cart.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-12 text-slate-400">
+            <i class="fa-solid fa-basket-shopping text-5xl mb-3"></i>
+            <p class="font-medium text-slate-600">Your cart is currently empty.</p>
+            <button onclick="toggleCartDrawer(); navigateTo('products');" class="mt-4 text-xs font-bold text-accent uppercase tracking-wider underline">Browse Catalog</button>
+          </div>
+        `;
+        subtotalEl.innerText = '$0.00';
+        totalEl.innerText = '$0.00';
+        return;
+      }
+
+      let html = '';
+      State.cart.forEach(item => {
+        html += `
+          <div class="flex items-center space-x-3 pb-3 border-b border-slate-100">
+            <img src="${item.product.image}" class="w-16 h-16 object-cover rounded-lg border">
+            <div class="flex-1 min-w-0">
+              <h4 class="text-xs font-bold text-slate-800 truncate">${item.product.name}</h4>
+              <p class="text-[10px] text-slate-500">${item.product.brand}</p>
+              <div class="text-xs font-extrabold text-navy mt-1">$${item.product.price.toFixed(2)}</div>
+            </div>
+            <div class="flex items-center border rounded bg-slate-50">
+              <button onclick="updateCartQty('${item.product.id}', -1)" class="px-2 py-0.5 text-xs text-slate-600 hover:bg-slate-200">-</button>
+              <span class="px-2 text-xs font-bold text-slate-800">${item.qty}</span>
+              <button onclick="updateCartQty('${item.product.id}', 1)" class="px-2 py-0.5 text-xs text-slate-600 hover:bg-slate-200">+</button>
+            </div>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+      const sub = calculateSubtotal();
+      subtotalEl.innerText = `$${sub.toFixed(2)}`;
+      totalEl.innerText = `$${sub.toFixed(2)}`;
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toastNotification');
+      document.getElementById('toastMessage').innerText = msg;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 3000);
+    }
+
+    function handleNewsletterSubmit(e) {
+      e.preventDefault();
+      e.target.reset();
+      showToast('Thank you for subscribing to ApexAuto offers!');
+    }
+
+    /* ==========================================================================
+       6. USER HEADER UI RENDERER
+       ========================================================================== */
+    function renderNavUserArea() {
+      const area = document.getElementById('navUserArea');
+      if (State.user) {
+        area.innerHTML = `
+          <div class="flex items-center space-x-2">
+            <button onclick="navigateTo('account')" class="flex items-center gap-2 bg-navy-light px-3 py-1.5 rounded-lg border border-slate-600 hover:bg-slate-700 transition-colors">
+              <i class="fa-solid fa-user-gear text-accent"></i>
+              <span class="text-xs font-bold text-white hidden sm:inline">${State.user.name}</span>
+            </button>
+            <button onclick="logoutUser()" title="Logout" class="p-2 text-slate-300 hover:text-red-400">
+              <i class="fa-solid fa-right-from-bracket"></i>
+            </button>
+          </div>
+        `;
+      } else {
+        area.innerHTML = `
+          <button onclick="openAuthModal('login')" class="flex items-center gap-2 bg-accent hover:bg-accent-hover px-4 py-2 rounded-lg text-xs font-bold tracking-wider uppercase text-white shadow transition-colors">
+            <i class="fa-solid fa-right-to-bracket"></i>
+            <span>Login / Register</span>
+          </button>
+        `;
+      }
+    }
+
+    /* ==========================================================================
+       7. PAGE VIEWS RENDERERS
+       ========================================================================== */
+
+    // --- HOME PAGE VIEW ---
+    function renderHomePage() {
+      return `
+        <div class="fade-in space-y-12">
+          
+          <!-- HERO BANNER SECTION -->
+          <section class="relative bg-gradient-to-r from-slate-900 via-navy-dark to-slate-900 text-white py-16 px-4 sm:px-6 lg:px-8 border-b-4 border-accent">
+            <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+              
+              <div class="lg:col-span-7 space-y-6">
+                <span class="inline-block bg-accent text-white text-xs font-black uppercase px-3 py-1 rounded-full tracking-widest shadow">
+                  <i class="fa-solid fa-shield-halved mr-1"></i> OEM & High Performance Parts
+                </span>
+                <h1 class="text-3xl sm:text-5xl font-black tracking-tight leading-tight uppercase">
+                  Engineered For <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-amber-400">Peak Precision</span> & Power
+                </h1>
+                <p class="text-slate-300 text-sm sm:text-base max-w-xl leading-relaxed">
+                  Upgrade your ride with tested, heavy-duty automotive components. Guaranteed vehicle fitment, nationwide fast delivery, and expert technical support.
+                </p>
+
+                <!-- Vehicle Selector Strip Widget inside Hero -->
+                <div class="bg-slate-800/90 border border-slate-700 p-4 rounded-xl shadow-2xl backdrop-blur max-w-lg">
+                  <div class="text-xs font-bold uppercase text-slate-300 mb-2 flex items-center justify-between">
+                    <span><i class="fa-solid fa-car text-accent mr-1"></i> Check Fitment For Your Vehicle</span>
+                    <span class="text-accent text-[10px] uppercase cursor-pointer hover:underline" onclick="openVehicleModal()">Change</span>
+                  </div>
+                  <div class="flex items-center justify-between bg-slate-900 px-4 py-2.5 rounded-lg border border-slate-700 text-xs font-semibold">
+                    <span class="text-white"><i class="fa-solid fa-circle-check text-emerald-400 mr-2"></i> Selected: <b>${State.selectedVehicle.year} ${State.selectedVehicle.make} ${State.selectedVehicle.model}</b></span>
+                    <button onclick="navigateTo('products')" class="text-accent hover:text-white font-bold uppercase text-[11px]">Shop Compatible Parts &rarr;</button>
+                  </div>
+                </div>
+
+                <div class="flex flex-wrap gap-4 pt-2">
+                  <button onclick="navigateTo('products')" class="bg-accent hover:bg-accent-hover text-white font-black px-8 py-3.5 rounded-lg text-sm uppercase tracking-wider shadow-lg transition-transform transform hover:-translate-y-0.5">
+                    Browse Catalog
+                  </button>
+                  <button onclick="filterByCategory('Brakes & Tires')" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-6 py-3.5 rounded-lg text-sm uppercase tracking-wider border border-slate-600 transition-colors">
+                    Explore Deals
+                  </button>
+                </div>
+              </div>
+
+              <div class="lg:col-span-5 relative hidden lg:block">
+                <div class="relative z-10 rounded-2xl overflow-hidden shadow-2xl border-2 border-slate-700">
+                  <img src="https://images.unsplash.com/photo-1486006920555-c77dce18193b?w=700&auto=format&fit=crop&q=80" alt="Engine Showcase" class="w-full h-80 object-cover">
+                  <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent"></div>
+                  <div class="absolute bottom-4 left-4 right-4 bg-slate-900/90 backdrop-blur p-4 rounded-xl border border-slate-700">
+                    <div class="flex justify-between items-center text-xs">
+                      <span class="font-bold uppercase text-slate-300">Featured Component</span>
+                      <span class="text-emerald-400 font-bold"><i class="fa-solid fa-check-circle"></i> In Stock</span>
+                    </div>
+                    <div class="font-bold text-white text-sm mt-1">High-Flow Performance Turbo Assembly</div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </section>
+
+          <!-- CATEGORIES SHOWCASE -->
+          <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between mb-8">
+              <div>
+                <h2 class="text-2xl font-black text-slate-900 uppercase tracking-wide">Featured Categories</h2>
+                <p class="text-xs text-slate-500">Find OEM standard replacement components categorized by system</p>
+              </div>
+              <button onclick="navigateTo('products')" class="text-xs font-bold text-navy hover:text-accent uppercase tracking-wider">
+                View All Categories &rarr;
+              </button>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              
+              <!-- Engine Parts -->
+              <div onclick="filterByCategory('Engine Parts')" class="bg-white rounded-xl shadow-md p-6 border border-slate-200 hover:border-navy hover:shadow-xl transition-all cursor-pointer group">
+                <div class="w-12 h-12 bg-navy text-white rounded-lg flex items-center justify-center text-2xl mb-4 group-hover:bg-accent transition-colors">
+                  <i class="fa-solid fa-gear"></i>
+                </div>
+                <h3 class="font-extrabold text-slate-900 text-lg group-hover:text-navy">Engine Parts</h3>
+                <ul class="text-xs text-slate-500 mt-3 space-y-1.5">
+                  <li><i class="fa-solid fa-chevron-right text-[8px] text-accent mr-1"></i> Filters (Oil, Air, Fuel)</li>
+                  <li><i class="fa-solid fa-chevron-right text-[8px] text-accent mr-1"></i> Spark Plugs & Wires</li>
+                  <li><i class="fa-solid fa-chevron-right text-[8px] text-accent mr-1"></i> Belts & Hoses</li>
+                  <li><i class="fa-solid fa-chevron-right text-[8px] text-accent mr-1"></i> Engine Oil & Fluids</li>
+                </ul>
+              </div>
+
+              <!-- Brakes & Tires -->
+              <div onclick="filterByCategory('Brakes & Tires')" class="bg-white rounded-xl shadow-md p-6 border border-slate-200 hover:border-navy hover:shadow-xl transition-all cursor-pointer group">
+                <div class="w-12 h-12 bg-navy text-white rounded-lg flex items-center justify-center text-2xl mb-4 group-hover:bg-accent transition-colors">
+                  <i class="fa-solid fa-circle-dot"></i>
+                </div>
+                <h3 class="font-extrabold text-slate-900 text-lg group-hover:text-navy">Brakes & Tires</h3>
+                <ul class="text-xs text-slate-500 mt-3 space-y-1.5">
+                  <li><i class="fa-solid fa-chevron-right text-[8px] text-accent mr-1"></i> Brake Pads & Rotors</li>
+                  <li><i class="fa-solid fa-chevron-right text-[8px] text-accent mr-1"></i> Calipers & Lines</li>
+                  <li><i class="fa-solid fa-chevron-right text-[8px] text-accent mr-1"></i> Tires & Custom Wheels</li>
+                  <li><i class="fa-solid fa-chevron-right text-[8px] text-accent mr-1"></i> TPMS Sensors</li>
+                </ul>
+              </div>
+
+              <!-- Lighting & Electrical -->
+              <div onclick="filterByCategory('Lighting & Electrical')" class="bg-white rounded-xl shadow-md p-6 border border-slate-200 hover:border-navy hover:shadow-xl transition-all cursor-pointer group">
+                <div class="w-12 h-12 bg-navy text-white rounded-lg flex items-center justify-center text-2xl mb-4 group-hover:bg-accent transition-colors">
+                  <i class="fa-solid fa-bolt"></i>
+                </div>
+                <h3 class="font-extrabold text-slate-900 text-lg group-hover:text-navy">Lighting & Electrical</h3>
+                <ul class="text-xs text-slate-500 mt-3 space-y-1.5">
+                  <li><i class="fa-solid fa-chevron-right text-[8px] text-accent mr-1"></i> Headlights & Bulbs</li>
+                  <li><i class="fa-solid fa-chevron-right text-[8px] text-accent mr-1"></i> AGM Batteries & Chargers</li>
+                  <li><i class="fa-solid fa-chevron-right text-[8px] text-accent mr-1"></i> Alternators & Starters</li>
+                  <li><i class="fa-solid fa-chevron-right text-[8px] text-accent mr-1"></i> Off-Road LED Light Bars</li>
+                </ul>
+              </div>
+
+              <!-- Accessories -->
+              <div onclick="filterByCategory('Accessories')" class="bg-white rounded-xl shadow-md p-6 border border-slate-200 hover:border-navy hover:shadow-xl transition-all cursor-pointer group">
+                <div class="w-12 h-12 bg-navy text-white rounded-lg flex items-center justify-center text-2xl mb-4 group-hover:bg-accent transition-colors">
+                  <i class="fa-solid fa-toolbox"></i>
+                </div>
+                <h3 class="font-extrabold text-slate-900 text-lg group-hover:text-navy">Accessories</h3>
+                <ul class="text-xs text-slate-500 mt-3 space-y-1.5">
+                  <li><i class="fa-solid fa-chevron-right text-[8px] text-accent mr-1"></i> Floor Mats & Liners</li>
+                  <li><i class="fa-solid fa-chevron-right text-[8px] text-accent mr-1"></i> Seat Covers & Comfort</li>
+                  <li><i class="fa-solid fa-chevron-right text-[8px] text-accent mr-1"></i> MagSafe Phone Mounts</li>
+                  <li><i class="fa-solid fa-chevron-right text-[8px] text-accent mr-1"></i> All-Weather Car Covers</li>
+                </ul>
+              </div>
+
+            </div>
+          </section>
+
+          <!-- FEATURED PRODUCTS & DEALS SECTION -->
+          <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between mb-8 border-b border-slate-200 pb-4">
+              <div>
+                <h2 class="text-2xl font-black text-slate-900 uppercase tracking-wide">Featured & Trending Parts</h2>
+                <p class="text-xs text-slate-500">Top-rated performance components backed by warranty</p>
+              </div>
+              <button onclick="navigateTo('products')" class="bg-navy text-white text-xs font-bold px-4 py-2 rounded-lg hover:bg-navy-dark transition-colors">
+                Explore All Products
+              </button>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              ${PRODUCTS.filter(p => p.isFeatured).map(product => renderProductCard(product)).join('')}
+            </div>
+          </section>
+
+          <!-- TRUST BADGES / FEATURES BANNER -->
+          <section class="bg-navy text-white py-12 px-4 sm:px-6 lg:px-8 my-12">
+            <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
+              <div class="space-y-2 p-4 rounded-xl bg-navy-dark/50 border border-slate-700">
+                <i class="fa-solid fa-truck-fast text-3xl text-accent"></i>
+                <h4 class="font-bold text-sm uppercase">Fast & Free Shipping</h4>
+                <p class="text-xs text-slate-400">Free standard shipping on orders over $75 within North America.</p>
+              </div>
+              <div class="space-y-2 p-4 rounded-xl bg-navy-dark/50 border border-slate-700">
+                <i class="fa-solid fa-shield-check text-3xl text-accent"></i>
+                <h4 class="font-bold text-sm uppercase">Exact Fit Guarantee</h4>
+                <p class="text-xs text-slate-400">100% money-back fitment accuracy guarantee on selected vehicles.</p>
+              </div>
+              <div class="space-y-2 p-4 rounded-xl bg-navy-dark/50 border border-slate-700">
+                <i class="fa-solid fa-rotate-left text-3xl text-accent"></i>
+                <h4 class="font-bold text-sm uppercase">30-Day Easy Returns</h4>
+                <p class="text-xs text-slate-400">Hassle-free online returns and rapid order exchange options.</p>
+              </div>
+              <div class="space-y-2 p-4 rounded-xl bg-navy-dark/50 border border-slate-700">
+                <i class="fa-solid fa-headset text-3xl text-accent"></i>
+                <h4 class="font-bold text-sm uppercase">24/7 Expert Support</h4>
+                <p class="text-xs text-slate-400">Speak directly with certified automotive mechanics for advice.</p>
+              </div>
+            </div>
+          </section>
+
+        </div>
+      `;
+    }
+
+    // --- PRODUCT LISTING VIEW WITH ADVANCED FILTERS ---
+    function renderProductListingPage() {
+      // Filter logic
+      let filtered = PRODUCTS.filter(product => {
+        if (State.filters.category !== 'All' && product.category !== State.filters.category) return false;
+        if (State.filters.subcategory !== 'All' && product.subcategory !== State.filters.subcategory) return false;
+        if (State.filters.brand !== 'All' && product.brand !== State.filters.brand) return false;
+        if (State.filters.vehicleType !== 'All' && product.vehicleType !== State.filters.vehicleType && product.vehicleType !== 'Universal') return false;
+        if (product.price > State.filters.maxPrice) return false;
+        if (State.searchQuery) {
+          const q = State.searchQuery.toLowerCase();
+          const matchName = product.name.toLowerCase().includes(q);
+          const matchCat = product.category.toLowerCase().includes(q);
+          const matchBrand = product.brand.toLowerCase().includes(q);
+          if (!matchName && !matchCat && !matchBrand) return false;
+        }
+        return true;
+      });
+
+      // Sort logic
+      if (State.filters.sort === 'price-low') {
+        filtered.sort((a, b) => a.price - b.price);
+      } else if (State.filters.sort === 'price-high') {
+        filtered.sort((a, b) => b.price - a.price);
+      } else if (State.filters.sort === 'rating') {
+        filtered.sort((a, b) => b.rating - a.rating);
+      }
+
+      // Categories and brands for dropdown filters
+      const brands = ['All', ...new Set(PRODUCTS.map(p => p.brand))];
+
+      return `
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 fade-in">
+          
+          <!-- BREADCRUMB & HEADER -->
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+            <div>
+              <div class="text-xs text-slate-500 mb-1">
+                <span class="hover:text-navy cursor-pointer" onclick="navigateTo('home')">Home</span> / 
+                <span class="font-semibold text-slate-800">Parts Catalog</span>
+              </div>
+              <h1 class="text-2xl font-black text-slate-900 uppercase">
+                ${State.filters.category === 'All' ? 'All Automotive Parts' : State.filters.category}
+              </h1>
+            </div>
+            
+            <div class="flex items-center space-x-3 text-xs">
+              <span class="text-slate-500 font-medium">${filtered.length} Products Found</span>
+              <select onchange="updateSort(this.value)" class="border border-slate-300 rounded-lg p-2 text-xs font-semibold bg-white focus:ring-2 focus:ring-navy">
+                <option value="featured" ${State.filters.sort === 'featured' ? 'selected' : ''}>Sort by Featured</option>
+                <option value="price-low" ${State.filters.sort === 'price-low' ? 'selected' : ''}>Price: Low to High</option>
+                <option value="price-high" ${State.filters.sort === 'price-high' ? 'selected' : ''}>Price: High to Low</option>
+                <option value="rating" ${State.filters.sort === 'rating' ? 'selected' : ''}>Customer Rating</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            
+            <!-- SIDEBAR FILTERS -->
+            <div class="lg:col-span-1 bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-6 h-fit">
+              <div class="flex justify-between items-center pb-4 border-b border-slate-200">
+                <h3 class="font-bold text-slate-900 text-sm uppercase flex items-center gap-2">
+                  <i class="fa-solid fa-sliders text-accent"></i> Filter Parts
+                </h3>
+                <button onclick="resetFilters()" class="text-[11px] font-semibold text-accent hover:underline">Reset All</button>
+              </div>
+
+              <!-- Vehicle Compatibility Notice -->
+              <div class="bg-navy-50 p-3 rounded-lg border border-navy-light/30">
+                <div class="text-[11px] font-bold text-navy uppercase">Active Vehicle Filter</div>
+                <div class="text-xs font-semibold text-slate-700">${State.selectedVehicle.year} ${State.selectedVehicle.make} ${State.selectedVehicle.model}</div>
+                <button onclick="openVehicleModal()" class="mt-2 text-[10px] text-accent font-bold uppercase underline">Change Vehicle</button>
+              </div>
+
+              <!-- Category Filter -->
+              <div>
+                <label class="block text-xs font-bold uppercase text-slate-700 mb-2">Category</label>
+                <select onchange="updateFilter('category', this.value)" class="w-full border border-slate-300 rounded-lg p-2 text-xs bg-white">
+                  <option value="All" ${State.filters.category === 'All' ? 'selected' : ''}>All Categories</option>
+                  <option value="Engine Parts" ${State.filters.category === 'Engine Parts' ? 'selected' : ''}>Engine Parts</option>
+                  <option value="Brakes & Tires" ${State.filters.category === 'Brakes & Tires' ? 'selected' : ''}>Brakes & Tires</option>
+                  <option value="Lighting & Electrical" ${State.filters.category === 'Lighting & Electrical' ? 'selected' : ''}>Lighting & Electrical</option>
+                  <option value="Accessories" ${State.filters.category === 'Accessories' ? 'selected' : ''}>Accessories</option>
+                </select>
+              </div>
+
+              <!-- Brand Filter -->
+              <div>
+                <label class="block text-xs font-bold uppercase text-slate-700 mb-2">Brand</label>
+                <select onchange="updateFilter('brand', this.value)" class="w-full border border-slate-300 rounded-lg p-2 text-xs bg-white">
+                  ${brands.map(b => `<option value="${b}" ${State.filters.brand === b ? 'selected' : ''}>${b}</option>`).join('')}
+                </select>
+              </div>
+
+              <!-- Max Price Range Filter -->
+              <div>
+                <div class="flex justify-between items-center mb-2">
+                  <label class="text-xs font-bold uppercase text-slate-700">Max Price</label>
+                  <span class="text-xs font-extrabold text-navy">$${State.filters.maxPrice}</span>
+                </div>
+                <input type="range" min="10" max="300" step="10" value="${State.filters.maxPrice}" onchange="updateFilter('maxPrice', this.value)" class="w-full accent-accent">
+              </div>
+
+            </div>
+
+            <!-- PRODUCT GRID RESULTS -->
+            <div class="lg:col-span-3">
+              ${filtered.length === 0 ? `
+                <div class="bg-white rounded-xl p-12 text-center border border-slate-200">
+                  <i class="fa-solid fa-magnifying-glass text-4xl text-slate-300 mb-3"></i>
+                  <h3 class="text-lg font-bold text-slate-800">No matching parts found</h3>
+                  <p class="text-xs text-slate-500 mt-1">Try relaxing your filter parameters or search terms.</p>
+                  <button onclick="resetFilters()" class="mt-4 bg-navy text-white text-xs font-bold px-4 py-2 rounded-lg">Reset Filters</button>
+                </div>
+              ` : `
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  ${filtered.map(p => renderProductCard(p)).join('')}
+                </div>
+              `}
+            </div>
+
+          </div>
+        </div>
+      `;
+    }
+
+    // Helper to render a single Product Card
+    function renderProductCard(product) {
+      const isWishlist = State.wishlist.includes(product.id);
+      return `
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between overflow-hidden group">
+          <div class="relative">
+            <!-- Product Image -->
+            <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
+            
+            <!-- Badges -->
+            ${product.badge ? `<span class="absolute top-3 left-3 bg-accent text-white text-[10px] font-black uppercase px-2.5 py-1 rounded shadow">${product.badge}</span>` : ''}
+
+            <!-- Wishlist Button -->
+            <button onclick="toggleWishlist('${product.id}')" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 backdrop-blur flex items-center justify-center text-slate-700 hover:text-accent shadow transition-colors">
+              <i class="${isWishlist ? 'fa-solid text-accent' : 'fa-regular'} fa-heart"></i>
+            </button>
+          </div>
+
+          <div class="p-4 flex-1 flex flex-col justify-between space-y-3">
+            <div>
+              <div class="flex justify-between items-center text-[10px] uppercase font-bold text-slate-400 mb-1">
+                <span>${product.brand}</span>
+                <span class="text-emerald-600"><i class="fa-solid fa-shield"></i> Guaranteed Fit</span>
+              </div>
+              <h3 onclick="navigateTo('detail', '${product.id}')" class="font-bold text-sm text-slate-900 group-hover:text-navy cursor-pointer line-clamp-2 leading-snug">
+                ${product.name}
+              </h3>
+            </div>
+
+            <!-- Rating & Reviews -->
+            <div class="flex items-center space-x-1 text-xs">
+              <div class="text-amber-400 flex text-[10px]">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star-half-stroke"></i>
+              </div>
+              <span class="font-bold text-slate-700 text-[11px]">${product.rating}</span>
+              <span class="text-slate-400 text-[10px]">(${product.reviewsCount})</span>
+            </div>
+
+            <!-- Pricing & Add to Cart -->
+            <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
+              <div>
+                <span class="text-lg font-black text-slate-900">$${product.price.toFixed(2)}</span>
+                ${product.originalPrice ? `<span class="text-xs text-slate-400 line-through ml-1">$${product.originalPrice.toFixed(2)}</span>` : ''}
+              </div>
+              
+              <button onclick="addToCart('${product.id}')" class="bg-navy hover:bg-accent text-white font-bold p-2.5 rounded-lg text-xs transition-colors flex items-center gap-1">
+                <i class="fa-solid fa-cart-plus"></i> Add
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function updateFilter(key, val) {
+      if (key === 'maxPrice') {
+        State.filters.maxPrice = Number(val);
+      } else {
+        State.filters[key] = val;
+      }
+      render();
+    }
+
+    function updateSort(val) {
+      State.filters.sort = val;
+      render();
+    }
+
+    function resetFilters() {
+      State.filters = { category: 'All', subcategory: 'All', brand: 'All', vehicleType: 'All', maxPrice: 300, sort: 'featured' };
+      State.searchQuery = '';
+      render();
+    }
+
+    // --- PRODUCT DETAIL PAGE VIEW ---
+    function renderProductDetailPage() {
+      const product = PRODUCTS.find(p => p.id === State.selectedProductId) || PRODUCTS[0];
+      const isWishlist = State.wishlist.includes(product.id);
+
+      return `
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 fade-in">
+          
+          <!-- BREADCRUMB -->
+          <div class="text-xs text-slate-500 mb-6">
+            <span class="hover:text-navy cursor-pointer" onclick="navigateTo('home')">Home</span> / 
+            <span class="hover:text-navy cursor-pointer" onclick="filterByCategory('${product.category}')">${product.category}</span> / 
+            <span class="font-semibold text-slate-800">${product.name}</span>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm">
+            
+            <!-- IMAGE GALLERY -->
+            <div class="lg:col-span-6 space-y-4">
+              <div class="relative overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
+                <img src="${product.image}" alt="${product.name}" class="w-full h-80 sm:h-96 object-cover">
+                ${product.badge ? `<span class="absolute top-4 left-4 bg-accent text-white text-xs font-black uppercase px-3 py-1 rounded shadow">${product.badge}</span>` : ''}
+              </div>
+            </div>
+
+            <!-- PRODUCT INFO & SPECS -->
+            <div class="lg:col-span-6 space-y-6">
+              <div>
+                <div class="text-xs font-bold uppercase text-accent tracking-wider mb-1">${product.brand} &bull; SKU: ${product.id}</div>
+                <h1 class="text-2xl sm:text-3xl font-black text-slate-900 leading-tight">${product.name}</h1>
+                
+                <div class="flex items-center space-x-3 mt-3">
+                  <div class="text-amber-400 flex text-sm">
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star-half-stroke"></i>
+                  </div>
+                  <span class="font-bold text-slate-800 text-sm">${product.rating}</span>
+                  <span class="text-xs text-slate-500">(${product.reviewsCount} customer reviews)</span>
+                </div>
+              </div>
+
+              <!-- PRICING PANEL -->
+              <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between">
+                <div>
+                  <div class="text-3xl font-black text-navy">$${product.price.toFixed(2)}</div>
+                  ${product.originalPrice ? `<span class="text-xs text-slate-400 line-through">MSRP: $${product.originalPrice.toFixed(2)}</span>` : ''}
+                </div>
+                <div class="text-right">
+                  <span class="inline-block px-2.5 py-1 rounded bg-emerald-100 text-emerald-800 text-xs font-bold">In Stock & Ready to Ship</span>
+                </div>
+              </div>
+
+              <!-- VEHICLE COMPATIBILITY CHECKER BAR -->
+              <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 flex items-center space-x-3">
+                <i class="fa-solid fa-circle-check text-2xl text-emerald-600"></i>
+                <div class="text-xs">
+                  <div class="font-bold text-emerald-900 uppercase">Confirmed Vehicle Fit</div>
+                  <div class="text-emerald-700">This part is verified to fit your <b>${State.selectedVehicle.year} ${State.selectedVehicle.make} ${State.selectedVehicle.model}</b>.</div>
+                </div>
+              </div>
+
+              <p class="text-sm text-slate-600 leading-relaxed">${product.description}</p>
+
+              <!-- ADD TO CART & WISHLIST ACTION ROW -->
+              <div class="flex space-x-4 pt-2">
+                <div class="flex items-center border border-slate-300 rounded-lg bg-white">
+                  <button onclick="adjustDetailQty(-1)" class="px-3 py-2 text-slate-600 hover:bg-slate-100 font-bold">-</button>
+                  <span id="detailQtyInput" class="px-4 text-sm font-bold">1</span>
+                  <button onclick="adjustDetailQty(1)" class="px-3 py-2 text-slate-600 hover:bg-slate-100 font-bold">+</button>
+                </div>
+
+                <button onclick="addSelectedDetailToCart('${product.id}')" class="flex-1 bg-accent hover:bg-accent-hover text-white font-extrabold uppercase py-3.5 px-6 rounded-lg text-sm tracking-wider shadow-lg transition-transform transform active:scale-95 flex items-center justify-center gap-2">
+                  <i class="fa-solid fa-cart-plus text-lg"></i> Add To Cart
+                </button>
+
+                <button onclick="toggleWishlist('${product.id}')" class="p-3.5 rounded-lg border border-slate-300 hover:border-accent text-slate-700 hover:text-accent transition-colors">
+                  <i class="${isWishlist ? 'fa-solid text-accent' : 'fa-regular'} fa-heart text-xl"></i>
+                </button>
+              </div>
+
+              <!-- TECHNICAL SPECIFICATIONS TABLE -->
+              <div class="pt-4 border-t border-slate-200">
+                <h3 class="font-bold text-slate-900 text-xs uppercase mb-3 tracking-wider">Technical Specifications</h3>
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                  ${Object.entries(product.specs).map(([k, v]) => `
+                    <div class="bg-slate-50 p-2.5 rounded border border-slate-100">
+                      <span class="text-slate-400 block text-[10px] uppercase">${k}</span>
+                      <span class="font-bold text-slate-800">${v}</span>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- RELATED PRODUCTS SECTION -->
+          <div class="mt-12">
+            <h2 class="text-xl font-black text-slate-900 uppercase mb-6">Related & Compatible Parts</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              ${PRODUCTS.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4).map(p => renderProductCard(p)).join('')}
+            </div>
+          </div>
+
+        </div>
+      `;
+    }
+
+    let detailQty = 1;
+    function adjustDetailQty(delta) {
+      detailQty = Math.max(1, detailQty + delta);
+      const el = document.getElementById('detailQtyInput');
+      if (el) el.innerText = detailQty;
+    }
+
+    function addSelectedDetailToCart(productId) {
+      addToCart(productId, detailQty);
+      detailQty = 1;
+    }
+
+    // --- SHOPPING CART PAGE VIEW ---
+    function renderCartPage() {
+      const subtotal = calculateSubtotal();
+
+      if (State.cart.length === 0) {
+        return `
+          <div class="max-w-4xl mx-auto px-4 py-16 text-center fade-in">
+            <div class="bg-white rounded-2xl p-12 border border-slate-200 shadow-sm space-y-4">
+              <i class="fa-solid fa-cart-flatbed text-6xl text-slate-300"></i>
+              <h2 class="text-2xl font-black text-slate-900 uppercase">Your Cart is Empty</h2>
+              <p class="text-sm text-slate-500 max-w-md mx-auto">Looks like you haven't added any auto parts to your shopping cart yet.</p>
+              <button onclick="navigateTo('products')" class="inline-block bg-accent hover:bg-accent-hover text-white font-bold px-8 py-3 rounded-lg text-xs uppercase tracking-wider shadow">
+                Browse Auto Parts
+              </button>
+            </div>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 fade-in">
+          <h1 class="text-2xl font-black text-slate-900 uppercase mb-8 flex items-center gap-2">
+            <i class="fa-solid fa-cart-shopping text-accent"></i> Shopping Cart (${State.cart.length} items)
+          </h1>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- CART ITEMS LIST -->
+            <div class="lg:col-span-8 bg-white rounded-xl border border-slate-200 p-6 shadow-sm space-y-6">
+              ${State.cart.map(item => `
+                <div class="flex flex-col sm:flex-row items-center justify-between p-4 border border-slate-100 rounded-xl space-y-4 sm:space-y-0">
+                  <div class="flex items-center space-x-4 w-full sm:w-auto">
+                    <img src="${item.product.image}" class="w-20 h-20 object-cover rounded-lg border">
+                    <div>
+                      <h3 class="font-bold text-slate-900 text-sm">${item.product.name}</h3>
+                      <p class="text-xs text-slate-500">Brand: ${item.product.brand} &bull; Vehicle: ${item.vehicleFit}</p>
+                      <div class="text-xs text-emerald-600 font-bold mt-1"><i class="fa-solid fa-check-circle"></i> Guaranteed Fitment</div>
+                    </div>
+                  </div>
+
+                  <div class="flex items-center justify-between sm:justify-end space-x-6 w-full sm:w-auto">
+                    <div class="flex items-center border border-slate-300 rounded-lg">
+                      <button onclick="updateCartQty('${item.product.id}', -1)" class="px-3 py-1 text-slate-600 font-bold">-</button>
+                      <span class="px-3 text-sm font-bold">${item.qty}</span>
+                      <button onclick="updateCartQty('${item.product.id}', 1)" class="px-3 py-1 text-slate-600 font-bold">+</button>
+                    </div>
+
+                    <div class="text-right">
+                      <div class="font-black text-slate-900 text-base">$${(item.product.price * item.qty).toFixed(2)}</div>
+                      <div class="text-[10px] text-slate-400">$${item.product.price.toFixed(2)} each</div>
+                    </div>
+
+                    <button onclick="removeFromCart('${item.product.id}')" class="text-slate-400 hover:text-accent p-2">
+                      <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+
+            <!-- ORDER SUMMARY SIDEBAR -->
+            <div class="lg:col-span-4 bg-white rounded-xl border border-slate-200 p-6 shadow-sm h-fit space-y-6">
+              <h3 class="font-bold text-slate-900 text-sm uppercase border-b border-slate-200 pb-3">Order Summary</h3>
+              
+              <div class="space-y-3 text-xs text-slate-600">
+                <div class="flex justify-between">
+                  <span>Parts Subtotal</span>
+                  <span class="font-bold text-slate-900">$${subtotal.toFixed(2)}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Estimated Shipping</span>
+                  <span class="font-bold text-emerald-600">FREE</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Estimated Taxes (8%)</span>
+                  <span class="font-bold text-slate-900">$${(subtotal * 0.08).toFixed(2)}</span>
+                </div>
+                <div class="pt-3 border-t border-slate-200 flex justify-between text-base font-black text-slate-900">
+                  <span>Total Amount</span>
+                  <span class="text-accent">$${(subtotal * 1.08).toFixed(2)}</span>
+                </div>
+              </div>
+
+              <button onclick="navigateTo('checkout')" class="w-full bg-accent hover:bg-accent-hover text-white font-extrabold uppercase py-3.5 rounded-lg text-sm tracking-wider shadow-lg transition-transform transform active:scale-95 text-center">
+                Proceed To Checkout &rarr;
+              </button>
+            </div>
+
+          </div>
+        </div>
+      `;
+    }
+
+    // --- CHECKOUT & PAYMENT SIMULATION PAGE VIEW ---
+    function renderCheckoutPage() {
+      const subtotal = calculateSubtotal();
+      const tax = subtotal * 0.08;
+      const grandTotal = subtotal + tax;
+
+      if (State.cart.length === 0) {
+        return renderCartPage();
+      }
+
+      return `
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 fade-in">
+          <h1 class="text-2xl font-black text-slate-900 uppercase mb-8 flex items-center gap-2">
+            <i class="fa-solid fa-credit-card text-accent"></i> Checkout Process
+          </h1>
+
+          <form onsubmit="handlePlaceOrderSubmit(event)" class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- SHIPPING ADDRESS & PAYMENT FORM -->
+            <div class="lg:col-span-8 space-y-6">
+              
+              <!-- Shipping Details -->
+              <div class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm space-y-4">
+                <h3 class="font-bold text-slate-900 text-sm uppercase flex items-center gap-2 border-b border-slate-200 pb-3">
+                  <i class="fa-solid fa-truck text-navy"></i> 1. Shipping Address
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                  <div>
+                    <label class="block font-bold text-slate-700 uppercase mb-1">First Name</label>
+                    <input type="text" required value="${State.user ? State.user.name.split(' ')[0] : 'Alex'}" class="w-full border border-slate-300 rounded-lg p-2.5">
+                  </div>
+                  <div>
+                    <label class="block font-bold text-slate-700 uppercase mb-1">Last Name</label>
+                    <input type="text" required value="${State.user ? State.user.name.split(' ')[1] || 'Mercer' : 'Mercer'}" class="w-full border border-slate-300 rounded-lg p-2.5">
+                  </div>
+                  <div class="sm:col-span-2">
+                    <label class="block font-bold text-slate-700 uppercase mb-1">Street Address</label>
+                    <input type="text" required value="742 Evergreen Terrace" class="w-full border border-slate-300 rounded-lg p-2.5">
+                  </div>
+                  <div>
+                    <label class="block font-bold text-slate-700 uppercase mb-1">City</label>
+                    <input type="text" required value="Springfield" class="w-full border border-slate-300 rounded-lg p-2.5">
+                  </div>
+                  <div>
+                    <label class="block font-bold text-slate-700 uppercase mb-1">Postal Code</label>
+                    <input type="text" required value="97477" class="w-full border border-slate-300 rounded-lg p-2.5">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Payment Simulation -->
+              <div class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm space-y-4">
+                <h3 class="font-bold text-slate-900 text-sm uppercase flex items-center gap-2 border-b border-slate-200 pb-3">
+                  <i class="fa-solid fa-credit-card text-navy"></i> 2. Payment Method Simulation
+                </h3>
+                
+                <div class="space-y-3">
+                  <label class="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer bg-slate-50">
+                    <input type="radio" name="payment" checked class="text-accent focus:ring-accent">
+                    <span class="text-xs font-bold text-slate-800"><i class="fa-solid fa-credit-card text-navy mr-1"></i> Credit / Debit Card</span>
+                  </label>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs pt-2">
+                  <div class="sm:col-span-2">
+                    <label class="block font-bold text-slate-700 uppercase mb-1">Card Number</label>
+                    <input type="text" required value="4532 &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; 8892" class="w-full border border-slate-300 rounded-lg p-2.5 font-mono">
+                  </div>
+                  <div>
+                    <label class="block font-bold text-slate-700 uppercase mb-1">Expiration Date</label>
+                    <input type="text" required value="08/28" class="w-full border border-slate-300 rounded-lg p-2.5 font-mono">
+                  </div>
+                  <div>
+                    <label class="block font-bold text-slate-700 uppercase mb-1">CVC Code</label>
+                    <input type="password" required value="123" class="w-full border border-slate-300 rounded-lg p-2.5 font-mono">
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- ORDER SUMMARY REVIEW -->
+            <div class="lg:col-span-4 bg-white rounded-xl border border-slate-200 p-6 shadow-sm h-fit space-y-6">
+              <h3 class="font-bold text-slate-900 text-sm uppercase border-b border-slate-200 pb-3">Review & Confirm</h3>
+              
+              <div class="space-y-3 custom-scrollbar max-h-60 overflow-y-auto pr-1">
+                ${State.cart.map(item => `
+                  <div class="flex justify-between text-xs">
+                    <span class="truncate max-w-[180px] font-medium text-slate-700">${item.qty}x ${item.product.name}</span>
+                    <span class="font-bold text-slate-900">$${(item.product.price * item.qty).toFixed(2)}</span>
+                  </div>
+                `).join('')}
+              </div>
+
+              <div class="pt-4 border-t border-slate-200 space-y-2 text-xs">
+                <div class="flex justify-between text-slate-600">
+                  <span>Subtotal</span>
+                  <span>$${subtotal.toFixed(2)}</span>
+                </div>
+                <div class="flex justify-between text-slate-600">
+                  <span>Taxes (8%)</span>
+                  <span>$${tax.toFixed(2)}</span>
+                </div>
+                <div class="flex justify-between text-sm font-black text-slate-900 pt-2 border-t border-slate-200">
+                  <span>Total Due</span>
+                  <span class="text-accent">$${grandTotal.toFixed(2)}</span>
+                </div>
+              </div>
+
+              <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold uppercase py-4 rounded-lg text-sm tracking-wider shadow-lg transition-transform transform active:scale-95 text-center">
+                <i class="fa-solid fa-lock mr-1"></i> Place Order Now
+              </button>
+            </div>
+
+          </form>
+        </div>
+      `;
+    }
+
+    function handlePlaceOrderSubmit(e) {
+      e.preventDefault();
+      const subtotal = calculateSubtotal();
+      const newOrder = {
+        id: 'ORD-' + Math.floor(10000 + Math.random() * 90000),
+        date: new Date().toISOString().split('T')[0],
+        total: subtotal * 1.08,
+        status: 'Processing',
+        trackingNumber: 'TRK-' + Math.floor(10000000 + Math.random() * 90000000) + '-US',
+        items: State.cart.map(i => ({ name: i.product.name, qty: i.qty, price: i.product.price }))
+      };
+
+      State.orders.unshift(newOrder);
+      State.cart = [];
+      updateCartBadges();
+
+      if (!State.user) {
+        State.user = { name: 'Alex Mercer', email: 'alex@apexauto.com', memberSince: '2026' };
+        renderNavUserArea();
+      }
+
+      showToast('Order placed successfully!');
+      navigateTo('account');
+    }
+
+    // --- USER ACCOUNT PAGE VIEW ---
+    function renderUserAccountPage(activeTab = 'orders') {
+      if (!State.user) {
+        return `
+          <div class="max-w-md mx-auto px-4 py-16 text-center fade-in">
+            <div class="bg-white rounded-2xl p-8 border border-slate-200 shadow-md space-y-4">
+              <i class="fa-solid fa-user-lock text-5xl text-navy"></i>
+              <h2 class="text-xl font-bold text-slate-900">User Authentication Required</h2>
+              <p class="text-xs text-slate-500">Please sign in to view your profile, tracked orders, saved vehicles, and wishlist.</p>
+              <button onclick="openAuthModal('login')" class="w-full bg-navy hover:bg-navy-dark text-white font-bold py-3 rounded-lg text-xs uppercase tracking-wider">
+                Log In / Register
+              </button>
+            </div>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 fade-in">
+          
+          <!-- ACCOUNT HEADER -->
+          <div class="bg-navy text-white p-6 sm:p-8 rounded-2xl shadow-md mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div class="flex items-center space-x-4">
+              <div class="w-16 h-16 rounded-full bg-accent text-white flex items-center justify-center font-black text-2xl shadow">
+                ${State.user.name.charAt(0)}
+              </div>
+              <div>
+                <h1 class="text-2xl font-black">${State.user.name}</h1>
+                <p class="text-xs text-slate-300">${State.user.email} &bull; Member since ${State.user.memberSince}</p>
+              </div>
+            </div>
+            <button onclick="logoutUser()" class="bg-navy-dark hover:bg-slate-800 text-xs font-bold px-4 py-2 rounded-lg border border-slate-600">
+              <i class="fa-solid fa-right-from-bracket mr-1"></i> Logout
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- ACCOUNT NAVIGATION TABS -->
+            <div class="lg:col-span-3 bg-white rounded-xl border border-slate-200 p-4 shadow-sm space-y-1 h-fit">
+              <button onclick="renderUserAccountPage('orders')" class="w-full text-left px-4 py-3 rounded-lg text-xs font-bold ${activeTab === 'orders' ? 'bg-navy text-white' : 'text-slate-700 hover:bg-slate-100'}">
+                <i class="fa-solid fa-box mr-2"></i> Order History & Tracking
+              </button>
+              <button onclick="renderUserAccountPage('vehicles')" class="w-full text-left px-4 py-3 rounded-lg text-xs font-bold ${activeTab === 'vehicles' ? 'bg-navy text-white' : 'text-slate-700 hover:bg-slate-100'}">
+                <i class="fa-solid fa-car mr-2"></i> Saved Vehicles Garage
+              </button>
+              <button onclick="renderUserAccountPage('wishlist')" class="w-full text-left px-4 py-3 rounded-lg text-xs font-bold ${activeTab === 'wishlist' ? 'bg-navy text-white' : 'text-slate-700 hover:bg-slate-100'}">
+                <i class="fa-solid fa-heart mr-2"></i> Saved Wishlist (${State.wishlist.length})
+              </button>
+            </div>
+
+            <!-- ACCOUNT TAB CONTENT -->
+            <div class="lg:col-span-9 bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+              ${activeTab === 'orders' ? renderOrdersTab() : ''}
+              ${activeTab === 'vehicles' ? renderVehiclesTab() : ''}
+              ${activeTab === 'wishlist' ? renderWishlistTab() : ''}
+            </div>
+
+          </div>
+        </div>
+      `;
+    }
+
+    function renderOrdersTab() {
+      return `
+        <div class="space-y-6">
+          <h2 class="text-lg font-extrabold text-slate-900 uppercase">Order History</h2>
+          ${State.orders.length === 0 ? `
+            <p class="text-xs text-slate-500">No previous orders found.</p>
+          ` : `
+            <div class="space-y-4">
+              ${State.orders.map(ord => `
+                <div class="border border-slate-200 rounded-xl p-4 bg-slate-50 space-y-3">
+                  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center text-xs pb-3 border-b border-slate-200 gap-2">
+                    <div>
+                      <span class="font-extrabold text-slate-900">${ord.id}</span> &bull; 
+                      <span class="text-slate-500">${ord.date}</span>
+                    </div>
+                    <div>
+                      <span class="bg-emerald-100 text-emerald-800 font-bold px-2.5 py-0.5 rounded text-[10px] uppercase">${ord.status}</span>
+                    </div>
+                  </div>
+
+                  <div class="space-y-1 text-xs">
+                    ${ord.items.map(i => `
+                      <div class="flex justify-between text-slate-700">
+                        <span>${i.qty}x ${i.name}</span>
+                        <span class="font-semibold">$${(i.price * i.qty).toFixed(2)}</span>
+                      </div>
+                    `).join('')}
+                  </div>
+
+                  <div class="pt-3 border-t border-slate-200 flex justify-between items-center text-xs">
+                    <span class="text-slate-500">Tracking Code: <b class="text-slate-800 font-mono">${ord.trackingNumber}</b></span>
+                    <span class="font-black text-slate-900 text-sm">Total: $${ord.total.toFixed(2)}</span>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          `}
+        </div>
+      `;
+    }
+
+    function renderVehiclesTab() {
+      return `
+        <div class="space-y-6">
+          <div class="flex justify-between items-center">
+            <h2 class="text-lg font-extrabold text-slate-900 uppercase">Saved Vehicles Garage</h2>
+            <button onclick="openVehicleModal()" class="bg-navy text-white text-xs font-bold px-3 py-2 rounded-lg">
+              + Add Vehicle
+            </button>
+          </div>
+
+          <div class="p-4 border-2 border-dashed border-slate-300 rounded-xl flex items-center justify-between bg-slate-50">
+            <div class="flex items-center space-x-3">
+              <i class="fa-solid fa-car text-3xl text-navy"></i>
+              <div>
+                <div class="font-bold text-slate-900 text-sm">${State.selectedVehicle.year} ${State.selectedVehicle.make} ${State.selectedVehicle.model}</div>
+                <div class="text-xs text-slate-500">Primary Vehicle</div>
+              </div>
+            </div>
+            <span class="bg-emerald-100 text-emerald-800 text-[10px] font-black uppercase px-2 py-1 rounded">Active Filter</span>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderWishlistTab() {
+      const wishlistProducts = PRODUCTS.filter(p => State.wishlist.includes(p.id));
+      return `
+        <div class="space-y-6">
+          <h2 class="text-lg font-extrabold text-slate-900 uppercase">Saved Wishlist</h2>
+          ${wishlistProducts.length === 0 ? `
+            <p class="text-xs text-slate-500">Your wishlist is empty.</p>
+          ` : `
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              ${wishlistProducts.map(p => renderProductCard(p)).join('')}
+            </div>
+          `}
+        </div>
+      `;
+    }
+
+    // --- ABOUT US PAGE VIEW ---
+    function renderAboutPage() {
+      return `
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 fade-in space-y-12">
+          <div class="text-center max-w-3xl mx-auto space-y-4">
+            <span class="text-accent text-xs font-bold uppercase tracking-widest">Built On Excellence</span>
+            <h1 class="text-3xl sm:text-4xl font-black text-slate-900 uppercase">About ApexAuto Parts</h1>
+            <p class="text-slate-600 text-sm leading-relaxed">
+              Founded in 2012, ApexAuto has grown from a local performance garage into a premier online supplier of precision automotive replacement parts, heavy-duty truck components, and high-performance racing gear.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm text-center space-y-3">
+              <i class="fa-solid fa-bullseye text-4xl text-accent"></i>
+              <h3 class="font-bold text-slate-900 text-lg uppercase">Our Mission</h3>
+              <p class="text-xs text-slate-500 leading-relaxed">To keep drivers safe and empowered on every journey by supplying OEM-spec quality automotive parts at competitive prices.</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm text-center space-y-3">
+              <i class="fa-solid fa-microchip text-4xl text-accent"></i>
+              <h3 class="font-bold text-slate-900 text-lg uppercase">Precision Tech</h3>
+              <p class="text-xs text-slate-500 leading-relaxed">Our advanced VIN & model compatibility lookup guarantees seamless fitment before ordering.</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm text-center space-y-3">
+              <i class="fa-solid fa-handshake-angle text-4xl text-accent"></i>
+              <h3 class="font-bold text-slate-900 text-lg uppercase">Expert Support</h3>
+              <p class="text-xs text-slate-500 leading-relaxed">Backed by a team of ASE-certified mechanics ready to answer installation questions 24/7.</p>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // --- CONTACT US PAGE VIEW ---
+    function renderContactPage() {
+      return `
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 fade-in">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+            
+            <div class="lg:col-span-5 space-y-6">
+              <div>
+                <span class="text-accent text-xs font-bold uppercase tracking-widest">Get In Touch</span>
+                <h1 class="text-3xl font-black text-slate-900 uppercase">Contact Support</h1>
+                <p class="text-xs text-slate-500 mt-2">Have a question regarding part fitment or order shipping? Reach out to our technical team.</p>
+              </div>
+
+              <div class="space-y-4 text-xs">
+                <div class="flex items-center space-x-3 p-4 bg-white rounded-xl border border-slate-200">
+                  <i class="fa-solid fa-location-dot text-xl text-accent"></i>
+                  <div>
+                    <div class="font-bold text-slate-900">Headquarters & Fulfillment</div>
+                    <div class="text-slate-500">100 Industrial Parkway, Detroit, MI 48201</div>
+                  </div>
+                </div>
+
+                <div class="flex items-center space-x-3 p-4 bg-white rounded-xl border border-slate-200">
+                  <i class="fa-solid fa-phone text-xl text-accent"></i>
+                  <div>
+                    <div class="font-bold text-slate-900">Customer Helpline</div>
+                    <div class="text-slate-500">1-800-APEX-AUTO (Mon - Fri: 8am - 8pm EST)</div>
+                  </div>
+                </div>
+
+                <div class="flex items-center space-x-3 p-4 bg-white rounded-xl border border-slate-200">
+                  <i class="fa-solid fa-envelope text-xl text-accent"></i>
+                  <div>
+                    <div class="font-bold text-slate-900">Email Inquiries</div>
+                    <div class="text-slate-500">support@apexauto.com</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- CONTACT FORM -->
+            <div class="lg:col-span-7 bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
+              <form onsubmit="handleContactSubmit(event)" class="space-y-4">
+                <h3 class="text-lg font-bold text-slate-900 uppercase border-b border-slate-200 pb-3">Send Us a Message</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                  <div>
+                    <label class="block font-bold text-slate-700 uppercase mb-1">Your Name</label>
+                    <input type="text" required class="w-full border border-slate-300 rounded-lg p-2.5">
+                  </div>
+                  <div>
+                    <label class="block font-bold text-slate-700 uppercase mb-1">Email Address</label>
+                    <input type="email" required class="w-full border border-slate-300 rounded-lg p-2.5">
+                  </div>
+                </div>
+                <div class="text-xs">
+                  <label class="block font-bold text-slate-700 uppercase mb-1">Subject</label>
+                  <input type="text" required placeholder="e.g. Fitment Inquiry for Toyota Brake Pads" class="w-full border border-slate-300 rounded-lg p-2.5">
+                </div>
+                <div class="text-xs">
+                  <label class="block font-bold text-slate-700 uppercase mb-1">Message</label>
+                  <textarea rows="4" required class="w-full border border-slate-300 rounded-lg p-2.5"></textarea>
+                </div>
+                <button type="submit" class="bg-navy hover:bg-navy-dark text-white font-extrabold uppercase py-3 px-6 rounded-lg text-xs tracking-wider shadow">
+                  Submit Support Ticket
+                </button>
+              </form>
+            </div>
+
+          </div>
+        </div>
+      `;
+    }
+
+    function handleContactSubmit(e) {
+      e.preventDefault();
+      e.target.reset();
+      showToast('Support ticket sent! A technician will respond shortly.');
+    }
+
+    /* ==========================================================================
+       8. MAIN RENDER ROUTER
+       ========================================================================== */
+    function render() {
+      const container = document.getElementById('appContainer');
+      renderNavUserArea();
+      updateCartBadges();
+      updateWishlistBadge();
+
+      switch (State.currentPage) {
+        case 'home':
+          container.innerHTML = renderHomePage();
+          break;
+        case 'products':
+          container.innerHTML = renderProductListingPage();
+          break;
+        case 'detail':
+          container.innerHTML = renderProductDetailPage();
+          break;
+        case 'cart':
+          container.innerHTML = renderCartPage();
+          break;
+        case 'checkout':
+          container.innerHTML = renderCheckoutPage();
+          break;
+        case 'account':
+          container.innerHTML = renderUserAccountPage();
+          break;
+        case 'about':
+          container.innerHTML = renderAboutPage();
+          break;
+        case 'contact':
+          container.innerHTML = renderContactPage();
+          break;
+        default:
+          container.innerHTML = renderHomePage();
+      }
+    }
+
+    /* ==========================================================================
+       9. INITIALIZATION
+       ========================================================================== */
+    window.onload = function() {
+      document.getElementById('navVehicleLabel').innerText = `${State.selectedVehicle.year} ${State.selectedVehicle.make} ${State.selectedVehicle.model}`;
+      render();
+    };
+  </script>
+</body>
+</html>
